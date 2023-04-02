@@ -1,0 +1,29 @@
+{
+  "name": "eslint-plugin-classify-imports",
+  "version": "1.0.0",
+  "description": "ESLint plugin to classify imports into external, internal, and unknown categories.",
+  "main": "lib/src/index.js",
+  "scripts": {
+    "prepare": "yarn run compile",
+    "compile": "tsc",
+    "dev": "tsc --watch",
+    "prepublishOnly": "npm run compile",
+    "test": "nodemon"
+  },
+  "author": "rinonguci",
+  "license": "MIT",
+  "dependencies": {
+    "@babel/core": "^7.12.0",
+    "@babel/parser": "^7.12.0",
+    "babel-generator": "^6.26.0"
+  },
+  "devDependencies": {
+    "@babel/types": "^7.21.4",
+    "@types/babel-generator": "^6.25.5",
+    "@types/node": "^18.11.18",
+    "babel-cli": "^6.26.0",
+    "nodemon": "^2.0.20",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.4"
+  }
+}
