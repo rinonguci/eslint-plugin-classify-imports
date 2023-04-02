@@ -1,7 +1,24 @@
 {
   "name": "eslint-plugin-classify-imports",
   "version": "1.0.0",
+  "author": "rinonguci",
   "description": "ESLint plugin to classify imports into external, internal, and unknown categories.",
+  "keywords": [
+    "sort",
+    "sorter",
+    "sorting",
+    "import",
+    "imports",
+    "order",
+    "classify",
+    "eslint",
+    "plugin",
+    "eslint-plugin",
+    "eslintplugin"
+  ],
+  "repository": "phatphamm01/eslint-plugin-classify-imports",
+  "homepage": "phatphamm01/eslint-plugin-classify-imports",
+  "bugs": "phatphamm01/eslint-plugin-classify-imports/issues",
   "main": "lib/src/index.js",
   "scripts": {
     "prepare": "yarn run compile",
@@ -10,7 +27,6 @@
     "prepublishOnly": "npm run compile",
     "test": "nodemon"
   },
-  "author": "rinonguci",
   "license": "MIT",
   "dependencies": {
     "@babel/core": "^7.12.0",
