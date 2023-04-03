@@ -1,6 +1,6 @@
 import { ImportDeclaration } from "../types/babel.type";
 import { Options } from "../types/common.type";
-import generator from "babel-generator";
+import { codeWithoutComment } from "./codeWithoutComment";
 
 const importTypes = {
   isTypeImport: (node: ImportDeclaration) => {
@@ -29,7 +29,7 @@ const sortByAlphaB = (array: ImportDeclaration[]) => {
 
 const importOrderSortByLength = (array: ImportDeclaration[]) => {
   const generatorWithOutComments = (node: ImportDeclaration) =>
-    generator(node as any, { comments: false }).code;
+    codeWithoutComment(node);
   array.sort(
     (a, b) =>
       generatorWithOutComments(a).length - generatorWithOutComments(b).length

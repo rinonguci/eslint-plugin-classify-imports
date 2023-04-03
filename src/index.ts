@@ -1,4 +1,5 @@
 import { classifyImport } from "./common/classifyImport";
+import { codeWithoutComment } from "./common/codeWithoutComment";
 import { convertNodesToString } from "./common/convertNodesToString";
 import { formatOptions } from "./common/formatOptions";
 import { getImportNodes } from "./common/getImportNodes";
@@ -103,7 +104,7 @@ const sortImportPlugin = (code: string, mergeOptions: Options) => {
   ) => {
     return allImports.map((node) => {
       let newImport = sortedImports.find(
-        (value) => value.source.value === node.source.value
+        (value) => codeWithoutComment(value) === codeWithoutComment(node)
       );
       if (!newImport) return;
       const lineCurrent = node.loc?.end.line;
