@@ -13,6 +13,7 @@ import {
   Loc,
 } from "./types/babel.type";
 import { Options } from "./types/common.type";
+import { formatImportOrder } from "./common/formatImportOrder";
 
 const classifyImportToCode = (body: ImportDeclaration[], options: Options) => {
   const generateImportGroup = (
@@ -29,6 +30,7 @@ const classifyImportToCode = (body: ImportDeclaration[], options: Options) => {
   };
 
   const importOrder = getImportOrder(options);
+
   const imports = classifyImport(body, options);
   const commentsWithImportOrder = options.importOrder.reduce(
     (acc, [key, value]: any) => {
@@ -65,7 +67,7 @@ const classifyImportToCode = (body: ImportDeclaration[], options: Options) => {
 };
 
 type ImportOrComment = ImportDeclaration | Comment | CommentBlock | CommentLine;
-const sortImportPlugin = (code: string, mergeOptions: Options) => {
+const sortImportPlugin = (code: string, options: Options) => {
   const formatComments = (
     allImports: ImportDeclaration[],
     commentsCustom: string[]
@@ -73,10 +75,11 @@ const sortImportPlugin = (code: string, mergeOptions: Options) => {
     return allImports.map((node) => {
       const { trailingComments, leadingComments, ...rest } = node;
       if (leadingComments && leadingComments.length > 0) {
-        const filteredComments = leadingComments.filter(
-          (comment) =>
-            !Boolean(commentsCustom.find((value) => comment.value.match(value)))
-        );
+        const filteredComments = leadingComments.filter((comment) => {
+          return !Boolean(
+            commentsCustom.find((value) => comment.value.match(value))
+          );
+        });
 
         return filteredComments.length === 0
           ? rest
@@ -123,7 +126,7 @@ const sortImportPlugin = (code: string, mergeOptions: Options) => {
     });
   };
 
-  const commentsCustom = mergeOptions.importOrder
+  const commentsCustom = options.importOrder
     .map((value) => value?.[1])
     .filter(Boolean);
 
@@ -137,12 +140,13 @@ const sortImportPlugin = (code: string, mergeOptions: Options) => {
   const lastImportLoc = lastImport.loc as unknown as Loc;
 
   const newAllImports = formatComments(allImports, commentsCustom);
-  const newCode = classifyImportToCode(newAllImports, mergeOptions).replace(
+  const newCode = classifyImportToCode(newAllImports, options).replace(
     /[\n]*$/,
     ""
   );
 
   const textToFirstImport = code.slice(0, firstImportLoc.start.index);
+
   const sortedImports = getImportNodes(
     parseCodeToAst(textToFirstImport + newCode)
   );
@@ -175,8 +179,12 @@ const create = (context: Context) => {
   const options = context.options[0] || {};
   const mergeOptions = {
     ...formatOptions(optionsDefault),
-    ...formatOptions(options),
+    ...formatOptions({
+      ...options,
+      importOrder: formatImportOrder(options.importOrder) || [],
+    }),
   } as Options;
+
   const pluginName = "plugin classify imports wrongs";
 
   return {

@@ -1,6 +1,6 @@
 {
   "name": "eslint-plugin-classify-imports",
-  "version": "1.0.4",
+  "version": "2.0.1",
   "author": "rinonguci",
   "description": "ESLint plugin to classify imports into external, internal, and unknown categories.",
   "keywords": [

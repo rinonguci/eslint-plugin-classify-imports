@@ -62,18 +62,17 @@ export const classifyImport = (
 
   body.forEach((node) => {
     if (node.type === "ImportDeclaration") {
+      const regex = importTypes.isArrayRegexImport(node, options);
+
       if (options.importOrderSplitType && importTypes.isTypeImport(node)) {
         importTypeImports.push(node);
+      } else if (regex) {
+        if (!arrayRegexImports[regex]) arrayRegexImports[regex] = [];
+        arrayRegexImports[regex].push(node);
       } else if (importTypes.isThirdPartyImport(node, options)) {
         thirdPartyImports.push(node);
       } else if (importTypes.isRelativePathImport(node)) {
         relativePathImports.push(node);
-      } else {
-        const regex = importTypes.isArrayRegexImport(node, options);
-        if (regex) {
-          if (!arrayRegexImports[regex]) arrayRegexImports[regex] = [];
-          arrayRegexImports[regex].push(node);
-        }
       }
     }
   });
